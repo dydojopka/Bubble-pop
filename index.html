@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Chromatic — шарики</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <nav class="header-links" aria-label="Проект и автор на GitHub">
+        <a class="header-link" href="https://github.com/dydojopka/Bubble-pop" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/>
+          </svg>
+          <span>Код на GitHub</span>
+        </a>
+        <a class="header-link" href="https://github.com/dydojopka" target="_blank" rel="noopener noreferrer" aria-label="Профиль dydojopka на GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+          </svg>
+          <span>Мой GitHub профиль</span>
+        </a>
+      </nav>
+    </header>
+
+    <section class="game-layout" aria-label="Игра в шарики">
+      <aside class="side-panel">
+        <div class="eyebrow">ТВОЯ СЕССИЯ</div>
+
+        <div class="score-card">
+          <span class="card-label">Счёт</span>
+          <strong id="score">00000</strong>
+          <div class="score-rule"></div>
+          <span class="card-label">Рекорд <b id="best">00000</b></span>
+        </div>
+
+        <div class="descent-card">
+          <div>
+            <span class="card-label">До следующего спуска</span>
+            <strong id="shotsUntilDescent">3</strong>
+          </div>
+          <div class="descent-track"><i id="descentProgress"></i></div>
+          <small id="descentHint">Осталось выстрелов: 3</small>
+        </div>
+
+        <div class="how-card">
+          <span class="how-icon">⌖</span>
+          <div>
+            <b>Прицелься и стреляй</b>
+            <p>Попади своим цветом в группу: от трёх соединённых шариков лопнут.
+              Поле опускается после серии из <span id="descentInterval">3</span> выстрелов — следи за счётчиком.</p>
+            <p>Уже собранные группы сами не лопаются. Не дай шарикам пересечь красную линию!</p>
+          </div>
+        </div>
+
+        <div class="points-card">
+          <span>Лопнувший шарик <b>+10</b></span>
+          <span>Отсоединённый шарик <b>+15</b></span>
+        </div>
+
+        <div class="side-actions">
+          <button class="text-button" id="restartButton"><span>↻</span> Начать заново</button>
+          <span class="keyboard-hint">ВЫСТРЕЛ <kbd>ЛКМ / ПРОБЕЛ</kbd></span>
+        </div>
+      </aside>
+
+      <section class="board-wrap">
+        <div class="board-top">
+          <div>
+            <h1>Bubble <span>pop.</span></h1>
+          </div>
+          <span class="ammo-hint" id="ammoHint">Прицелься мышью</span>
+        </div>
+
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="gameCanvas" width="720" height="700" tabindex="0"
+            aria-label="Игровое поле. Цельтесь мышью, стреляйте левой кнопкой или пробелом."></canvas>
+
+          <div class="game-overlay hidden" id="overlay">
+            <div class="overlay-card">
+              <span class="overlay-kicker">ИГРА ОКОНЧЕНА</span>
+              <h2>Ещё один раунд?</h2>
+              <p>Счёт: <b id="overlayScore">0</b></p>
+              <p>Рекорд: <b id="overlayBest">0</b></p>
+              <button class="primary-button" id="overlayButton">Попробовать снова <span>→</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="board-footer">
+          <span><i class="footer-dot"></i> <span id="statusText">Твой ход</span></span>
+          <span class="descent-status" id="descentStatus">До спуска: 3</span>
+        </div>
+      </section>
+    </section>
+
+    <footer class="page-footer">
+    </footer>
+  </main>
+
+  <script src="vendor/createjs.min.js"></script>
+  <script src="game-core.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
