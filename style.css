@@ -11,9 +11,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 72% 30%, #19213c 0, transparent 48%),
-    radial-gradient(ellipse at 5% 95%, #15273b 0, transparent 38%), var(--bg);
+  background: var(--bg);
   color: var(--white);
   font-family: Manrope, system-ui, sans-serif;
 }
@@ -84,7 +82,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   border-radius: 50%;
   background: var(--mint);
   margin-right: 8px;
-  box-shadow: 0 0 10px #63f2c4;
 }
 .engine-badge {
   padding: 9px 12px;
@@ -103,19 +100,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   padding: 38px 0 30px;
 }
 .side-panel { padding-top: 8px; }
-.eyebrow, .board-kicker {
+.board-kicker {
   font-size: 10px;
   letter-spacing: 1.8px;
   color: #7f8ba7;
   font-weight: 800;
 }
 .score-card {
-  margin-top: 16px;
   padding: 22px 20px 18px;
-  background: linear-gradient(145deg, #17223a, #11182a);
+  background: #141c30;
   border: 1px solid var(--line);
   border-radius: 18px;
-  box-shadow: 0 18px 42px #0002;
 }
 .card-label { color: #9ca8c2; font-size: 12px; font-weight: 600; }
 .score-card > strong {
@@ -173,7 +168,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   border-radius: 18px;
   overflow: hidden;
   background: #10172a;
-  box-shadow: 0 24px 70px #0005, 0 0 45px #536cff0b;
 }
 .canvas-frame canvas { display: block; width: 100%; height: auto; aspect-ratio: 720 / 700; touch-action: none; cursor: crosshair; }
 .canvas-frame:focus-within { border-color: #5ba78f; }
@@ -184,7 +178,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   display: grid;
   place-items: center;
   background: #080d19b8;
-  backdrop-filter: blur(9px);
   z-index: 2;
 }
 .game-overlay.hidden { display: none; }
@@ -193,8 +186,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   padding: 32px 30px;
   border: 1px solid #ffffff20;
   border-radius: 20px;
-  background: linear-gradient(145deg, #1a2540, #10172a);
-  box-shadow: 0 20px 60px #0007;
+  background: #141c30;
   max-width: 340px;
   margin: 12px;
 }
@@ -213,7 +205,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
   .app-shell { padding: 0 22px; }
   .game-layout { grid-template-columns: 1fr; gap: 18px; max-width: 720px; margin: auto; padding-top: 24px; }
   .side-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; order: 2; }
-  .eyebrow { grid-column: 1 / -1; }
   .score-card { margin: 0; }
   .descent-card { margin: 0; }
   .how-card { margin: 0; grid-column: 1 / -1; }
