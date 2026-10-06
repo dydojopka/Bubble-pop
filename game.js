@@ -2,6 +2,7 @@
 
 const canvas = document.getElementById('gameCanvas');
 const statusText = document.getElementById('statusText');
+const statusDot = document.querySelector('.footer-dot');
 const overlay = document.getElementById('overlay');
 const stage = new createjs.Stage(canvas);
 stage.mouseMoveOutside = true;
@@ -39,6 +40,11 @@ let slide = [];
 let loadedBubble;
 let barrel;
 
+// Только время показа интерфейса: эти таймеры не управляют игровым состоянием.
+const statusDurations = { flying: 1000, matched: 1200, warning: 1200, descending: 1000 };
+let statusTimer = null;
+let statusQueue = [];
+
 function razmerPolya() {
   // Учитываем плотность пикселей, чтобы шарики не размывались.
   const bounds = canvas.getBoundingClientRect();
@@ -59,6 +65,35 @@ function prochitatRekord() {
     if (Number.isSafeInteger(saved) && saved >= 0) return saved;
   } catch { /* Браузер может запретить хранение данных. */ }
   return 0;
+}
+
+function pokazatSleduyushchiyStatus() {
+  const message = statusQueue.shift();
+  if (!message) return;
+  statusText.textContent = message.text;
+  statusDot.dataset.status = message.status;
+  const duration = statusDurations[message.status] || 0;
+  if (duration > 0) {
+    statusTimer = setTimeout(function () {
+      statusTimer = null;
+      pokazatSleduyushchiyStatus();
+    }, duration);
+  }
+}
+
+function obnovitStatus(text, status = 'ready', immediately = false) {
+  if (immediately || status === 'gameover') {
+    clearTimeout(statusTimer);
+    statusTimer = null;
+    statusQueue = [];
+  } else {
+    // Не показываем устаревшие «твой ход» / «в пути» между результатами выстрелов.
+    statusQueue = statusQueue.filter(message => message.status !== 'ready' && message.status !== 'flying');
+  }
+  statusQueue.push({ text, status });
+  // При быстрой стрельбе сохраняем только три последних сообщения, без длинной очереди.
+  if (statusQueue.length > 3) statusQueue.shift();
+  if (statusTimer === null) pokazatSleduyushchiyStatus();
 }
 
 function obnovitSchet() {
@@ -217,7 +252,7 @@ function vystrel() {
   state = 'flying';
   loadedBubble.visible = false;
   aim.visible = false;
-  statusText.textContent = 'Шарик в пути…';
+  obnovitStatus('Шарик в пути…', 'flying');
   return true;
 }
 
@@ -248,7 +283,7 @@ function zakrepitSharik(hit, from) {
     shot = null;
     state = 'ready';
     risovatPushku();
-    statusText.textContent = 'Шарик не закрепился — попробуй другой угол';
+    obnovitStatus('Шарик не закрепился — попробуй другой угол', 'warning');
     return;
   }
   const bubble = dobavitSharik(pole, cell[0], cell[1], shot.color);
@@ -276,9 +311,9 @@ function zakrepitSharik(hit, from) {
   state = 'resolving';
   resolveRemaining = 0.1;
   if (removed.length > 0) resolveRemaining = 0.26;
-  if (popped > 0) statusText.textContent = popped + ' шариков лопнули · +' + earned + ' очков';
-  else if (shotsUntilDescent === 0) statusText.textContent = 'Нет совпадения — поле опускается';
-  else statusText.textContent = 'Нет совпадения — попробуй ещё';
+  if (popped > 0) obnovitStatus(popped + ' шариков лопнули · +' + earned + ' очков', 'matched');
+  else if (shotsUntilDescent === 0) obnovitStatus('Нет совпадения — поле опускается', 'warning');
+  else obnovitStatus('Нет совпадения — попробуй ещё', 'warning');
 }
 
 function effektVzryva(item) {
@@ -347,6 +382,7 @@ function nachatSpusk() {
     slide.push({ view: view, origin: origin, target: target });
   }
   state = 'descending';
+  obnovitStatus('Поле опускается…', 'descending');
   descentElapsed = 0;
 }
 
@@ -376,7 +412,7 @@ function novyyHod() {
   nextColor = vybratCvet();
   state = 'ready';
   risovatPushku();
-  statusText.textContent = 'Твой ход · ЛКМ или пробел';
+  obnovitStatus('Твой ход · ЛКМ или пробел');
 }
 
 function zavershitHod() {
@@ -392,7 +428,7 @@ function proigrysh() {
   document.getElementById('overlayScore').textContent = score;
   document.getElementById('overlayBest').textContent = best;
   overlay.classList.remove('hidden');
-  statusText.textContent = 'Игра окончена';
+  obnovitStatus('Игра окончена', 'gameover');
 }
 
 function ochistitScenu() {
@@ -411,6 +447,7 @@ function ochistitScenu() {
   aimX = CONFIG.shooterX;
   aimY = 100;
   overlay.classList.add('hidden');
+  obnovitStatus('Твой ход · ЛКМ или пробел', 'ready', true);
 }
 
 function nachatZanovo() {
@@ -422,7 +459,6 @@ function nachatZanovo() {
   risovatPushku();
   obnovitSchet();
   obnovitSchetchik();
-  statusText.textContent = 'Твой ход · ЛКМ или пробел';
   risovatPricel();
   stage.update();
 }

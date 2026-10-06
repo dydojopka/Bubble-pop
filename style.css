@@ -197,6 +197,10 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-
 .primary-button span { margin-left: 16px; }
 .board-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; color: #95a1ba; font-size: 10px; padding: 14px 4px; }
 .footer-dot { width: 6px; height: 6px; }
+.footer-dot[data-status="flying"], .footer-dot[data-status="warning"] { background: #ffc85c; }
+.footer-dot[data-status="matched"] { background: #a88bff; }
+.footer-dot[data-status="descending"] { background: #57d9ff; }
+.footer-dot[data-status="gameover"] { background: #ff6666; }
 .descent-status { color: var(--mint); white-space: nowrap; }
 .page-footer { border-top: 1px solid var(--line); padding: 18px 0 24px; display: flex; justify-content: space-between; gap: 12px; color: #65718b; font-size: 9px; letter-spacing: .5px; }
 .page-footer b { color: var(--mint); padding: 0 4px; }
